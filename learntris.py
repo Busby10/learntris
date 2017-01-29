@@ -6,7 +6,7 @@ play_grid = [[".",".",".",".",".",".",".",".",".","."] for x in range(22)]
 
 
 while True:
-    command = input("Command: ")
+    command = input()
     if command == "q":
         exit()
     elif command == "p":
