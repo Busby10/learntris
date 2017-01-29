@@ -43,6 +43,22 @@ class Grid(object):
             self.active_tet =  [["r", "r", "."],
                                 [".", "r", "r"],
                                 [".", ".", "."]]
+        elif tetramino == "S":
+            self.active_tet =  [[".", "g", "g"],
+                                ["g", "g", "."],
+                                [".", ".", "."]]
+        elif tetramino == "J":
+            self.active_tet =  [["b", ".", "."],
+                                ["b", "b", "b"],
+                                [".", ".", "."]]
+        elif tetramino == "L":
+            self.active_tet =  [[".", ".", "o"],
+                                ["o", "o", "o"],
+                                [".", ".", "."]]
+        elif tetramino == "T":
+            self.active_tet =  [[".", "m", "."],
+                                ["m", "m", "m"],
+                                [".", ".", "."]]
 
     def print_active_tet(self):
         for i,row in enumerate(self.active_tet):
@@ -81,7 +97,7 @@ def take_action(command):
         #Step
         play_grid.full_row_check()
 
-    elif command in ["I", "O", "Z"]:
+    elif command in "IOZSJLT":
         play_grid.set_active_tet(command)
 
     elif command == "t":
