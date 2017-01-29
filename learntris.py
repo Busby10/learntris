@@ -36,19 +36,23 @@ class Grid(object):
                                 ["c", "c", "c", "c"],
                                 [".", ".", ".", "."],
                                 [".", ".", ".", "."]]
+        elif tetramino == "O":
+            self.active_tet =  [["y", "y"],
+                                ["y", "y"]]
+        elif tetramino == "Z":
+            self.active_tet =  [["r", "r", "."],
+                                [".", "r", "r"],
+                                [".", ".", "."]]
 
     def print_active_tet(self):
         for i,row in enumerate(self.active_tet):
             print(" ".join(row))
 
 
-play_grid = Grid()
 
-while True:
-    command = input()
-
+def take_action(command):
     if command == "q":
-        #Quits program
+    #Quits program
         exit()
 
     elif command == "p":
@@ -77,8 +81,24 @@ while True:
         #Step
         play_grid.full_row_check()
 
-    elif command == "I":
+    elif command in ["I", "O", "Z"]:
         play_grid.set_active_tet(command)
 
     elif command == "t":
         play_grid.print_active_tet()
+
+    else:
+        print("Incorrect input: ", command)
+        exit()
+
+
+play_grid = Grid()
+
+while True:
+    command = input()
+    if " " in command:
+        commands = command.split(" ")
+        for c in commands:
+            take_action(c)
+    else:
+        take_action(command)
