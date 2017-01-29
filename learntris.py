@@ -7,6 +7,7 @@ class Grid(object):
         self.reset_grid()
         self.score = 0
         self.cleared_lines = 0
+        self.active_tet = []
 
     def reset_grid(self):
         self.grid = [[".",".",".",".",".",".",".",".",".","."] for x in range(22)]
@@ -28,6 +29,17 @@ class Grid(object):
                 self.set_row(row_num)
                 self.score += 100
                 self.cleared_lines += 1
+
+    def set_active_tet(self,tetramino):
+        if tetramino == "I":
+            self.active_tet =  [[".", ".", ".", "."],
+                                ["c", "c", "c", "c"],
+                                [".", ".", ".", "."],
+                                [".", ".", ".", "."]]
+
+    def print_active_tet(self):
+        for i,row in enumerate(self.active_tet):
+            print(" ".join(row))
 
 
 play_grid = Grid()
@@ -65,5 +77,8 @@ while True:
         #Step
         play_grid.full_row_check()
 
+    elif command == "I":
+        play_grid.set_active_tet(command)
 
-
+    elif command == "t":
+        play_grid.print_active_tet()
