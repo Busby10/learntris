@@ -6,11 +6,10 @@ def reset_grid():
 
 
 
-
-
-
-
 play_grid = reset_grid()
+
+score = 0
+cleared_lines = 0
 
 while True:
     command = input()
@@ -31,6 +30,12 @@ while True:
 
     elif command == "c":
         play_grid = reset_grid()
+
+    elif command == "?s":
+        print(score)
+
+    elif command == "?n":
+        print(cleared_lines)
 
 
 
