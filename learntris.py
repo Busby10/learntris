@@ -13,6 +13,12 @@ class Grid(object):
         for i,row in enumerate(self.grid):
             print(" ".join(row))
 
+    def set_row(self, row_num, row=None):
+        if row == None:
+            self.grid[row_num] = [".",".",".",".",".",".",".",".",".","."]
+        else:
+            for col_num,item in enumerate(row.split(" ")):
+                self.grid[row_num][col_num] = item
 
 
 
@@ -34,8 +40,7 @@ while True:
 
         for y in range(22):
             row = input()
-            for x,i in enumerate(row.split(" ")):
-                play_grid.grid[y][x] = i
+            play_grid.set_row(y,row)
 
     elif command == "c":
         play_grid.reset_grid()
