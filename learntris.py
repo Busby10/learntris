@@ -5,6 +5,8 @@ class Grid(object):
     def __init__(self):
         self.grid = []
         self.reset_grid()
+        self.score = 0
+        self.cleared_lines = 0
 
     def reset_grid(self):
         self.grid = [[".",".",".",".",".",".",".",".",".","."] for x in range(22)]
@@ -20,36 +22,48 @@ class Grid(object):
             for col_num,item in enumerate(row.split(" ")):
                 self.grid[row_num][col_num] = item
 
+    def full_row_check(self):
+        for row_num,row in enumerate(self.grid):
+            if "." not in row:
+                self.set_row(row_num)
+                self.score += 100
+                self.cleared_lines += 1
 
 
 play_grid = Grid()
-
-score = 0
-cleared_lines = 0
 
 while True:
     command = input()
 
     if command == "q":
+        #Quits program
         exit()
 
     elif command == "p":
+        #Prints current Grid
         play_grid.print_grid()
 
     elif command == "g":
-
+        #Set grid to given grid
         for y in range(22):
             row = input()
             play_grid.set_row(y,row)
 
     elif command == "c":
+        #Clear grid
         play_grid.reset_grid()
 
     elif command == "?s":
-        print(score)
+        #Print score
+        print(play_grid.score)
 
     elif command == "?n":
-        print(cleared_lines)
+        #Print number of lines cleared
+        print(play_grid.cleared_lines)
+
+    elif command == "s":
+        #Step
+        play_grid.full_row_check()
 
 
 
