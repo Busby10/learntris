@@ -1,12 +1,17 @@
 #!/usr/bin/env python
 
-def reset_grid():
-    grid = [[".",".",".",".",".",".",".",".",".","."] for x in range(22)]
-    return grid
+class Grid(object):
+
+    def __init__(self):
+        self.grid = []
+        self.reset_grid()
+
+    def reset_grid(self):
+        self.grid = [[".",".",".",".",".",".",".",".",".","."] for x in range(22)]
 
 
 
-play_grid = reset_grid()
+play_grid = Grid()
 
 score = 0
 cleared_lines = 0
@@ -18,7 +23,7 @@ while True:
         exit()
 
     elif command == "p":
-        for i,row in enumerate(play_grid):
+        for i,row in enumerate(play_grid.grid):
             print(" ".join(row))
 
     elif command == "g":
@@ -26,10 +31,10 @@ while True:
         for y in range(22):
             row = input()
             for x,i in enumerate(row.split(" ")):
-                play_grid[y][x] = i
+                play_grid.grid[y][x] = i
 
     elif command == "c":
-        play_grid = reset_grid()
+        play_grid.reset_grid()
 
     elif command == "?s":
         print(score)
