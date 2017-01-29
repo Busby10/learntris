@@ -9,6 +9,11 @@ class Grid(object):
     def reset_grid(self):
         self.grid = [[".",".",".",".",".",".",".",".",".","."] for x in range(22)]
 
+    def print_grid(self):
+        for i,row in enumerate(self.grid):
+            print(" ".join(row))
+
+
 
 
 play_grid = Grid()
@@ -23,8 +28,7 @@ while True:
         exit()
 
     elif command == "p":
-        for i,row in enumerate(play_grid.grid):
-            print(" ".join(row))
+        play_grid.print_grid()
 
     elif command == "g":
 
