@@ -102,6 +102,12 @@ class Grid(object):
         #Creates a new grid that is the same size as the active tetramino
         new_tet = [["." for x in range(len(self.active_tet))] for x in range(len(self.active_tet))]
 
+        if direction == "(":
+
+            for y, row in enumerate(self.active_tet):
+                for x, col in enumerate(row):
+                    new_tet[-(x+1)][y] = col
+
         if direction == ")":
 
             for y, row in enumerate(self.active_tet):
@@ -109,6 +115,7 @@ class Grid(object):
                     new_tet[x][-(y+1)] = col
 
         self.active_tet = new_tet
+        self.active_tet_limits = self.find_tet_limits()
 
     def print_active_grid(self):
         #prints grid with the active tetramino on it.
@@ -119,8 +126,8 @@ class Grid(object):
         for y,row in enumerate(self.active_tet):
             for x,col in enumerate(row):
                 #copies the active tet over the top of the new grid starting at the set entry point.
-
-                new_grid[self.tet_current_point[0]+y][self.tet_current_point[1]+x] = col.upper()
+                if col not in ".":
+                    new_grid[self.tet_current_point[0]+y][self.tet_current_point[1]+x] = col.upper()
         self.print_grid(new_grid)
 
     def shift_tet(self, direction):
@@ -129,7 +136,7 @@ class Grid(object):
         if direction == "<" and not (self.tet_current_point[1] - self.active_tet_limits[0]) == 0:
             self.tet_current_point[1] -= 1
 
-        if direction == ">" and not self.active_tet_limits[1] == 9:
+        if direction == ">" and not (self.tet_current_point[1] + self.active_tet_limits[1]) == 9:
             self.tet_current_point[1] += 1
 
         if direction == "v":
@@ -145,6 +152,7 @@ class Grid(object):
         for y, row in enumerate(self.active_tet):
                 for x, col in enumerate(row):
                     if col not in ".":
+
                         if x < left:
                             left = x
                         if x > right:
@@ -153,6 +161,7 @@ class Grid(object):
                             up = y
                         if y > down:
                             down = y
+
 
         return [left,right,up,down]
 
