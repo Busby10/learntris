@@ -139,7 +139,7 @@ class Grid(object):
         if direction == ">" and not (self.tet_current_point[1] + self.active_tet_limits[1]) == 9:
             self.tet_current_point[1] += 1
 
-        if direction == "v":
+        if direction == "v" and not (self.tet_current_point[0] + self.active_tet_limits[3]) == 21:
             self.tet_current_point[0] += 1
 
     def find_tet_limits(self):
