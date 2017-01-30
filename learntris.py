@@ -14,6 +14,7 @@ class Grid(object):
         self.grid = [[".",".",".",".",".",".",".",".",".","."] for x in range(22)]
 
     def print_grid(self, given_grid = None):
+        #prints a given grid, or self.grid if no arguments given
         if given_grid == None:
             for i,row in enumerate(self.grid):
                 print(" ".join(row))
@@ -22,6 +23,8 @@ class Grid(object):
                 print(" ".join(row))
 
     def set_row(self, row_num, row=None):
+        #sets a given row at a specified row number, or clears the row number if
+        # no new row is given. Input row is provided as a string
         if row == None:
             self.grid[row_num] = [".",".",".",".",".",".",".",".",".","."]
         else:
@@ -29,6 +32,7 @@ class Grid(object):
                 self.grid[row_num][col_num] = item
 
     def full_row_check(self):
+        #checks for a complete row. If found, clears it and adds score
         for row_num,row in enumerate(self.grid):
             if "." not in row:
                 self.set_row(row_num)
@@ -36,6 +40,7 @@ class Grid(object):
                 self.cleared_lines += 1
 
     def set_active_tet(self,tetramino):
+        #Sets active tetramino to the argument and its entry point
         if tetramino == "I":
             self.active_tet =  [[".", ".", ".", "."],
                                 ["c", "c", "c", "c"],
@@ -79,11 +84,14 @@ class Grid(object):
             self.entry_point = (0,3)
 
     def print_active_tet(self):
+        #prints active tetramino
         for i,row in enumerate(self.active_tet):
             print(" ".join(row))
 
     def rotate_tet(self,direction):
+        #rotates the active tetramino a given direction.
 
+        #Creates a new grid that is the same size as the active tetramino
         new_tet = [["." for x in range(len(self.active_tet))] for x in range(len(self.active_tet))]
 
         if direction == ")":
@@ -95,16 +103,21 @@ class Grid(object):
         self.active_tet = new_tet
 
     def print_active_grid(self):
+        #prints grid with the active tetramino on it.
+
+        #Creates a new grid that is a copy of self.grid
         new_grid = [list(i) for i in self.grid]
+
         for y,row in enumerate(self.active_tet):
             for x,col in enumerate(row):
+                #copies the active tet over the top of the new grid starting at the set entry point.
                 new_grid[self.entry_point[0]+y][self.entry_point[1]+x] = col.upper()
         self.print_grid(new_grid)
 
 
 def take_action(command):
     if command == "q":
-    #Quits program
+        #Quits program
         exit()
 
     elif command == "p":
@@ -138,16 +151,21 @@ def take_action(command):
         play_grid.full_row_check()
 
     elif command in "IOZSJLT":
+        #sets the active tetranimo
         play_grid.set_active_tet(command)
 
     elif command == "t":
+        #prints the active tetranimo
         play_grid.print_active_tet()
 
     elif command == ")" or command == "(":
+        #rotates the tet
         play_grid.rotate_tet(command)
 
     elif command == ";":
+        #prints a blank line
         print("")
+
     else:
         print("Incorrect input: ", command)
         exit()
@@ -156,10 +174,22 @@ def take_action(command):
 play_grid = Grid()
 
 while True:
+
     command = input()
-    if " " in command:
-        commands = command.split(" ")
-        for c in commands:
+    itercomm = iter(command)
+    # create iterable of input line
+    for c in itercomm:
+        #loop over command line
+
+        if c == " ":
+            #ignore spaces
+            continue
+
+        elif c == "?":
+            take_action(c+next(itercomm))
+            #queries start with ? followed by next letter. This adds the next
+            #item in the iterable to the ? and passes to take action.
+
+        else:
             take_action(c)
-    else:
-        take_action(command)
+
