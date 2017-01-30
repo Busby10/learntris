@@ -8,7 +8,8 @@ class Grid(object):
         self.score = 0
         self.cleared_lines = 0
         self.active_tet = []
-        self.entry_point = (0,0)
+        self.active_tet_limits = [0,0,0,0] #left,right,up,down
+        self.tet_current_point = [0,0]
 
     def reset_grid(self):
         self.grid = [[".",".",".",".",".",".",".",".",".","."] for x in range(22)]
@@ -46,42 +47,49 @@ class Grid(object):
                                 ["c", "c", "c", "c"],
                                 [".", ".", ".", "."],
                                 [".", ".", ".", "."]]
-            self.entry_point = (0,3)
+            self.tet_current_point = [0,3]
 
         elif tetramino == "O":
             self.active_tet =  [["y", "y"],
                                 ["y", "y"]]
-            self.entry_point = (0,4)
+            self.tet_current_point = [0,4]
 
         elif tetramino == "Z":
             self.active_tet =  [["r", "r", "."],
                                 [".", "r", "r"],
                                 [".", ".", "."]]
-            self.entry_point = (0,3)
+
+            self.tet_current_point = [0,3]
 
         elif tetramino == "S":
             self.active_tet =  [[".", "g", "g"],
                                 ["g", "g", "."],
                                 [".", ".", "."]]
-            self.entry_point = (0,3)
+
+            self.tet_current_point = [0,3]
 
         elif tetramino == "J":
             self.active_tet =  [["b", ".", "."],
                                 ["b", "b", "b"],
                                 [".", ".", "."]]
-            self.entry_point = (0,3)
+
+            self.tet_current_point = [0,3]
 
         elif tetramino == "L":
             self.active_tet =  [[".", ".", "o"],
                                 ["o", "o", "o"],
                                 [".", ".", "."]]
-            self.entry_point = (0,3)
+
+            self.tet_current_point = [0,3]
 
         elif tetramino == "T":
             self.active_tet =  [[".", "m", "."],
                                 ["m", "m", "m"],
                                 [".", ".", "."]]
-            self.entry_point = (0,3)
+
+            self.tet_current_point = [0,3]
+
+        self.active_tet_limits = self.find_tet_limits()
 
     def print_active_tet(self):
         #prints active tetramino
@@ -111,8 +119,42 @@ class Grid(object):
         for y,row in enumerate(self.active_tet):
             for x,col in enumerate(row):
                 #copies the active tet over the top of the new grid starting at the set entry point.
-                new_grid[self.entry_point[0]+y][self.entry_point[1]+x] = col.upper()
+
+                new_grid[self.tet_current_point[0]+y][self.tet_current_point[1]+x] = col.upper()
         self.print_grid(new_grid)
+
+    def shift_tet(self, direction):
+        #move the active tetramino in the given direction
+
+        if direction == "<" and not (self.tet_current_point[1] - self.active_tet_limits[0]) == 0:
+            self.tet_current_point[1] -= 1
+
+        if direction == ">" and not self.active_tet_limits[1] == 9:
+            self.tet_current_point[1] += 1
+
+        if direction == "v":
+            self.tet_current_point[0] += 1
+
+    def find_tet_limits(self):
+        #find the tetramino limits in the active tet grid
+        left = len(self.active_tet[1])-1
+        right = 0
+        up = len(self.active_tet)-1
+        down = 0
+
+        for y, row in enumerate(self.active_tet):
+                for x, col in enumerate(row):
+                    if col not in ".":
+                        if x < left:
+                            left = x
+                        if x > right:
+                            right = x
+                        if y < up:
+                            up = y
+                        if y > down:
+                            down = y
+
+        return [left,right,up,down]
 
 
 def take_action(command):
@@ -165,6 +207,10 @@ def take_action(command):
     elif command == ";":
         #prints a blank line
         print("")
+
+    elif command in "<>v":
+        #moves the active tetramino
+        play_grid.shift_tet(command)
 
     else:
         print("Incorrect input: ", command)
