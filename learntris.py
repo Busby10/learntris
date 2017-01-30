@@ -118,6 +118,8 @@ def take_action(command):
     elif command == ")" or command == "(":
         play_grid.rotate_tet(command)
 
+    elif command == ";":
+        print("")
     else:
         print("Incorrect input: ", command)
         exit()
