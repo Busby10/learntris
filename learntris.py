@@ -64,6 +64,18 @@ class Grid(object):
         for i,row in enumerate(self.active_tet):
             print(" ".join(row))
 
+    def rotate_tet(self,direction):
+
+        new_tet = [["." for x in range(len(self.active_tet))] for x in range(len(self.active_tet))]
+
+        if direction == ")":
+
+            for y, row in enumerate(self.active_tet):
+                for x, col in enumerate(row):
+                    new_tet[x][-(y+1)] = col
+
+        self.active_tet = new_tet
+
 
 
 def take_action(command):
@@ -102,6 +114,9 @@ def take_action(command):
 
     elif command == "t":
         play_grid.print_active_tet()
+
+    elif command == ")" or command == "(":
+        play_grid.rotate_tet(command)
 
     else:
         print("Incorrect input: ", command)
