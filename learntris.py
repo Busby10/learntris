@@ -8,7 +8,7 @@ class Grid(object):
         self.score = 0
         self.cleared_lines = 0
         self.active_tet = []
-        self.entry_point = (0,4)
+        self.entry_point = (0,0)
 
     def reset_grid(self):
         self.grid = [[".",".",".",".",".",".",".",".",".","."] for x in range(22)]
@@ -41,29 +41,42 @@ class Grid(object):
                                 ["c", "c", "c", "c"],
                                 [".", ".", ".", "."],
                                 [".", ".", ".", "."]]
+            self.entry_point = (0,3)
+
         elif tetramino == "O":
             self.active_tet =  [["y", "y"],
                                 ["y", "y"]]
+            self.entry_point = (0,4)
+
         elif tetramino == "Z":
             self.active_tet =  [["r", "r", "."],
                                 [".", "r", "r"],
                                 [".", ".", "."]]
+            self.entry_point = (0,3)
+
         elif tetramino == "S":
             self.active_tet =  [[".", "g", "g"],
                                 ["g", "g", "."],
                                 [".", ".", "."]]
+            self.entry_point = (0,3)
+
         elif tetramino == "J":
             self.active_tet =  [["b", ".", "."],
                                 ["b", "b", "b"],
                                 [".", ".", "."]]
+            self.entry_point = (0,3)
+
         elif tetramino == "L":
             self.active_tet =  [[".", ".", "o"],
                                 ["o", "o", "o"],
                                 [".", ".", "."]]
+            self.entry_point = (0,3)
+
         elif tetramino == "T":
             self.active_tet =  [[".", "m", "."],
                                 ["m", "m", "m"],
                                 [".", ".", "."]]
+            self.entry_point = (0,3)
 
     def print_active_tet(self):
         for i,row in enumerate(self.active_tet):
