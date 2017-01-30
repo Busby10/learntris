@@ -8,13 +8,18 @@ class Grid(object):
         self.score = 0
         self.cleared_lines = 0
         self.active_tet = []
+        self.entry_point = (0,4)
 
     def reset_grid(self):
         self.grid = [[".",".",".",".",".",".",".",".",".","."] for x in range(22)]
 
-    def print_grid(self):
-        for i,row in enumerate(self.grid):
-            print(" ".join(row))
+    def print_grid(self, given_grid = None):
+        if given_grid == None:
+            for i,row in enumerate(self.grid):
+                print(" ".join(row))
+        else:
+            for i,row in enumerate(given_grid):
+                print(" ".join(row))
 
     def set_row(self, row_num, row=None):
         if row == None:
@@ -76,6 +81,12 @@ class Grid(object):
 
         self.active_tet = new_tet
 
+    def print_active_grid(self):
+        new_grid = [list(i) for i in self.grid]
+        for y,row in enumerate(self.active_tet):
+            for x,col in enumerate(row):
+                new_grid[self.entry_point[0]+y][self.entry_point[1]+x] = col.upper()
+        self.print_grid(new_grid)
 
 
 def take_action(command):
@@ -86,6 +97,10 @@ def take_action(command):
     elif command == "p":
         #Prints current Grid
         play_grid.print_grid()
+
+    elif command == "P":
+        #Prints current active Grid
+        play_grid.print_active_grid()
 
     elif command == "g":
         #Set grid to given grid
