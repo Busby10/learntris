@@ -141,6 +141,11 @@ class Grid(object):
 
         if direction == "v" and not (self.tet_current_point[0] + self.active_tet_limits[3]) == 21:
             self.tet_current_point[0] += 1
+            self.impact_check()
+
+        if direction == "V":
+            self.tet_current_point[0] = 21 - self.active_tet_limits[3]
+            self.impact_check()
 
     def find_tet_limits(self):
         #find the tetramino limits in the active tet grid
@@ -165,6 +170,22 @@ class Grid(object):
 
         return [left,right,up,down]
 
+    def impact_check(self):
+
+        if (self.tet_current_point[0] + self.active_tet_limits[3]) == 21:
+            self.write_active_tet()
+
+        else:
+            for x,col in enumerate(self.active_tet[self.active_tet_limits[3]]):
+                if self.grid[(self.tet_current_point[0] + self.active_tet_limits[3])+1][self.tet_current_point[1]+x] not in ".":
+                    self.write_active_tet()
+
+    def write_active_tet(self):
+        for y,row in enumerate(self.active_tet):
+            for x,col in enumerate(row):
+                #copies the active tet over the top of the new grid starting at the current point
+                if col not in ".":
+                    self.grid[self.tet_current_point[0]+y][self.tet_current_point[1]+x] = col
 
 def take_action(command):
     if command == "q":
@@ -217,7 +238,7 @@ def take_action(command):
         #prints a blank line
         print("")
 
-    elif command in "<>v":
+    elif command in "<>vV":
         #moves the active tetramino
         play_grid.shift_tet(command)
 
