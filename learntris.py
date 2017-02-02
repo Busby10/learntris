@@ -60,7 +60,7 @@ class Grid(object):
         #move the active tetramino in the given direction
 
         if direction == "<" and not (self.active_tet.current_point[1] - self.active_tet.limits[0]) == 0:
-            self.tet_current_point[1] -= 1
+            self.active_tet.current_point[1] -= 1
 
         if direction == ">" and not (self.active_tet.current_point[1] + self.active_tet.limits[1]) == 9:
             self.active_tet.current_point[1] += 1
@@ -81,12 +81,12 @@ class Grid(object):
             self.write_active_tet()
 
         else:
-            for x,col in enumerate(self.active_tet[self.active_tet.limits[3]]):
+            for x,col in enumerate(self.active_tet.tet[self.active_tet.limits[3]]):
                 if self.grid[(self.active_tet.current_point[0] + self.active_tet.limits[3])+1][self.active_tet.current_point[1]+x] not in ".":
                     self.write_active_tet()
 
     def write_active_tet(self):
-        for y,row in enumerate(self.active_tet):
+        for y,row in enumerate(self.active_tet.tet):
             for x,col in enumerate(row):
                 #copies the active tet over the top of the new grid starting at the current point
                 if col not in ".":
@@ -97,8 +97,9 @@ class Tetramino(object):
     def __init__(self, tet_type):
 
         self.current_point = [0,0] #y, x
-        self.limits = [0,0,0,0] #left,right,up,down
         self.tet = self.set_type(tet_type)
+        self.limits = self.find_tet_limits()
+
 
     def print_tet(self):
         #prints active tetramino
@@ -107,56 +108,57 @@ class Tetramino(object):
 
     def set_type(self,tetramino):
         #Sets active tetramino to the argument and its entry point
-
+        active = []
         if tetramino == "I":
 
-            return  [[".", ".", ".", "."],
+            active =   [[".", ".", ".", "."],
                      ["c", "c", "c", "c"],
                      [".", ".", ".", "."],
                      [".", ".", ".", "."]]
             self.current_point = [0,3]
 
         elif tetramino == "O":
-            return  [["y", "y"],
+            active =   [["y", "y"],
                      ["y", "y"]]
             self.current_point = [0,4]
 
+
         elif tetramino == "Z":
-            return [["r", "r", "."],
+            active =  [["r", "r", "."],
                     [".", "r", "r"],
                     [".", ".", "."]]
 
             self.current_point = [0,3]
 
         elif tetramino == "S":
-            return [[".", "g", "g"],
+            active =  [[".", "g", "g"],
                     ["g", "g", "."],
                     [".", ".", "."]]
 
             self.current_point = [0,3]
 
         elif tetramino == "J":
-            return [["b", ".", "."],
+            active =  [["b", ".", "."],
                     ["b", "b", "b"],
                     [".", ".", "."]]
 
             self.current_point = [0,3]
 
         elif tetramino == "L":
-            return [[".", ".", "o"],
+            active =  [[".", ".", "o"],
                     ["o", "o", "o"],
                     [".", ".", "."]]
 
             self.current_point = [0,3]
 
         elif tetramino == "T":
-            return [[".", "m", "."],
+            active =  [[".", "m", "."],
                     ["m", "m", "m"],
                     [".", ".", "."]]
 
             self.current_point = [0,3]
 
-        self.limits = self.find_tet_limits()
+        return active
 
     def find_tet_limits(self):
         #find the tetramino limits in the active tet grid
