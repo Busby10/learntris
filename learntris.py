@@ -71,14 +71,18 @@ class Grid(object):
 
         if direction == "V":
             #fix this
-            for v in range(22):
+            while not (self.active_tet.current_point[0] + self.active_tet.limits[3]) == 21:
+
                 self.active_tet.current_point[0] += 1
                 self.impact_check()
+
 
     def impact_check(self):
 
         if (self.active_tet.current_point[0] + self.active_tet.limits[3]) == 21:
             self.write_active_tet()
+
+
 
         else:
             for x,col in enumerate(self.active_tet.tet[self.active_tet.limits[3]]):
