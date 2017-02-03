@@ -87,7 +87,15 @@ class Grid(object):
 
 
         for x,col in enumerate(self.active_tet.tet[self.active_tet.limits[3]]):
-            if col not in "." and self.grid[(self.active_tet.current_point[0] + self.active_tet.limits[3])+1][self.active_tet.current_point[1]+x] not in ".":
+            if (col in "." and
+                self.active_tet.tet[self.active_tet.limits[3]-1][x] not in "."
+                ):
+                if self.grid[(self.active_tet.current_point[0] + self.active_tet.limits[3])][self.active_tet.current_point[1]+x] not in ".":
+                    self.write_active_tet()
+                    return True
+            elif (col not in "." and
+                  self.grid[(self.active_tet.current_point[0] + self.active_tet.limits[3])+1][self.active_tet.current_point[1]+x] not in "."
+                  ):
                 self.write_active_tet()
                 return True
 
@@ -110,7 +118,10 @@ class Grid(object):
                     if self.grid[self.active_tet.current_point[0]+y][self.active_tet.current_point[1] + self.active_tet.limits[0]] not in ".":
                         return True
                 #else, check the grid to see if there is anything in the square left of the tet
-                elif self.grid[self.active_tet.current_point[0]+y][self.active_tet.current_point[1] + self.active_tet.limits[0]-1] not in ".":
+
+                elif (row[self.active_tet.limits[0]] not in "." and
+                        self.grid[self.active_tet.current_point[0]+y][self.active_tet.current_point[1] + self.active_tet.limits[0]-1] not in "."
+                        ):
 
                     return True
 
@@ -126,7 +137,9 @@ class Grid(object):
                     if self.grid[self.active_tet.current_point[0]+y][self.active_tet.current_point[1] + self.active_tet.limits[1]] not in ".":
                         return True
 
-                elif self.grid[self.active_tet.current_point[0]+y][self.active_tet.current_point[1] + self.active_tet.limits[1]+1] not in ".":
+                elif (row[self.active_tet.limits[1]] not in "." and
+                        self.grid[self.active_tet.current_point[0]+y][self.active_tet.current_point[1] + self.active_tet.limits[1]+1] not in "."
+                        ):
                     return True
 
 
@@ -139,6 +152,16 @@ class Grid(object):
                 if col not in ".":
                     self.grid[self.active_tet.current_point[0]+y][self.active_tet.current_point[1]+x] = col
 
+        self.game_over_check()
+
+    def game_over_check(self):
+        if (not self.grid[0] == [".",".",".",".",".",".",".",".",".","."] or
+            not self.grid[1] == [".",".",".",".",".",".",".",".",".","."]
+            ):
+            self.active_tet = None
+            self.print_grid()
+            print("Game Over")
+            exit()
 
 class Tetramino(object):
     def __init__(self, tet_type):
