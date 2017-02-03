@@ -95,25 +95,42 @@ class Grid(object):
         return False
 
     def impact_check_side(self,direction):
+        #returns true if the active tet is colliding with something (either the walls or another tet)
         if direction == "left":
+            #check if the tet is against the left wall
             if (self.active_tet.current_point[1] - self.active_tet.limits[0]) == 0:
                 return True
+            #for any of the leftmost side of the active tet, check if there is a non-blank square next to it.
             for y,row in enumerate(self.active_tet.tet):
-                if (row[self.active_tet.limits[0]] not in "." and
-                self.grid[self.active_tet.current_point[0]+y][self.active_tet.current_point[1] + self.active_tet.limits[0]-1] not in "."
-                ):
+                #if the leftmost tet column contains a blank space
+                if (row[self.active_tet.limits[0]] in "." and
+                    row[self.active_tet.limits[0]+1] not in "."
+                    ):
+                    #check one col back
+                    if self.grid[self.active_tet.current_point[0]+y][self.active_tet.current_point[1] + self.active_tet.limits[0]] not in ".":
+                        return True
+                #else, check the grid to see if there is anything in the square left of the tet
+                elif self.grid[self.active_tet.current_point[0]+y][self.active_tet.current_point[1] + self.active_tet.limits[0]-1] not in ".":
+
                     return True
+
+
 
         elif direction == "right":
             if (self.active_tet.current_point[1] + self.active_tet.limits[1]) == 9:
                 return True
             for y,row in enumerate(self.active_tet.tet):
-                if (row[self.active_tet.limits[1]] not in "." and
-                self.grid[self.active_tet.current_point[0]+y][self.active_tet.current_point[1] + self.active_tet.limits[1]+1] not in "."
-                ):
+                if (row[self.active_tet.limits[1]] in "." and
+                    row[self.active_tet.limits[1]-1] not in "."
+                    ):
+                    if self.grid[self.active_tet.current_point[0]+y][self.active_tet.current_point[1] + self.active_tet.limits[1]] not in ".":
+                        return True
+
+                elif self.grid[self.active_tet.current_point[0]+y][self.active_tet.current_point[1] + self.active_tet.limits[1]+1] not in ".":
                     return True
-        else:
-            return False
+
+
+        return False
 
     def write_active_tet(self):
         for y,row in enumerate(self.active_tet.tet):
@@ -127,8 +144,10 @@ class Tetramino(object):
     def __init__(self, tet_type):
 
         self.current_point = [0,0] #y, x
+        self.colour = None
         self.tet = self.set_type(tet_type)
         self.limits = self.find_tet_limits()
+
 
 
     def print_tet(self):
@@ -146,11 +165,13 @@ class Tetramino(object):
                      [".", ".", ".", "."],
                      [".", ".", ".", "."]]
             self.current_point = [0,3]
+            self.colour = "c"
 
         elif tetramino == "O":
             active =   [["y", "y"],
                      ["y", "y"]]
             self.current_point = [0,4]
+            self.colour = "y"
 
 
         elif tetramino == "Z":
@@ -159,6 +180,7 @@ class Tetramino(object):
                     [".", ".", "."]]
 
             self.current_point = [0,3]
+            self.colour = "r"
 
         elif tetramino == "S":
             active =  [[".", "g", "g"],
@@ -166,6 +188,7 @@ class Tetramino(object):
                     [".", ".", "."]]
 
             self.current_point = [0,3]
+            self.colour = "g"
 
         elif tetramino == "J":
             active =  [["b", ".", "."],
@@ -173,6 +196,7 @@ class Tetramino(object):
                     [".", ".", "."]]
 
             self.current_point = [0,3]
+            self.colour = "b"
 
         elif tetramino == "L":
             active =  [[".", ".", "o"],
@@ -180,6 +204,7 @@ class Tetramino(object):
                     [".", ".", "."]]
 
             self.current_point = [0,3]
+            self.colour = "o"
 
         elif tetramino == "T":
             active =  [[".", "m", "."],
@@ -187,6 +212,7 @@ class Tetramino(object):
                     [".", ".", "."]]
 
             self.current_point = [0,3]
+            self.colour = "m"
 
         return active
 
