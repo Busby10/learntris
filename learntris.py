@@ -315,12 +315,18 @@ def take_action(command):
         play_grid.shift_tet(command)
 
     else:
-        print("Incorrect input: ", command)
+        print("Incorrect input: \"", command,"\"")
         exit()
+
+def menu(command):
+    if command == "p":
+        print("Learntris (c) 1992 Tetraminex, Inc.")
+        print("Press start button to begin.")
 
 
 play_grid = Grid()
-
+main_menu = False
+paused = False
 while True:
 
     command = input()
@@ -333,11 +339,39 @@ while True:
             #ignore spaces
             continue
 
-        elif c == "?":
-            take_action(c+next(itercomm))
-            #queries start with ? followed by next letter. This adds the next
-            #item in the iterable to the ? and passes to take action.
+        elif c == "@":
+            main_menu = True
 
-        else:
-            take_action(c)
+        elif main_menu:
+            if c == "!":
+                main_menu = False
+            else:
+                menu(c)
+
+
+        elif not main_menu:
+            if not paused:
+
+                if c == "!":
+                    print("Paused")
+                    print("Press start button to continue.")
+                    paused = True
+
+                else:
+
+                    if c == "?":
+                        #queries start with ? followed by next letter. This adds the next
+                        #item in the iterable to the ? and passes to take action.
+                        take_action(c+next(itercomm))
+
+                    else:
+                        take_action(c)
+
+            else:
+                if c == "!":
+                    paused = False
+
+
+
+
 
