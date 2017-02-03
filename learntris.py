@@ -59,35 +59,61 @@ class Grid(object):
     def shift_tet(self, direction):
         #move the active tetramino in the given direction
 
-        if direction == "<" and not (self.active_tet.current_point[1] - self.active_tet.limits[0]) == 0:
+        if direction == "<" and not self.impact_check_side("left"):
+
             self.active_tet.current_point[1] -= 1
 
-        if direction == ">" and not (self.active_tet.current_point[1] + self.active_tet.limits[1]) == 9:
+        if direction == ">" and not self.impact_check_side("right"):
+
             self.active_tet.current_point[1] += 1
 
-        if direction == "v" and not (self.active_tet.current_point[0] + self.active_tet.limits[3]) == 21:
+        if direction == "v" and not self.impact_check_base():
             self.active_tet.current_point[0] += 1
-            self.impact_check()
+            self.impact_check_base()
 
         if direction == "V":
             #fix this
-            while not (self.active_tet.current_point[0] + self.active_tet.limits[3]) == 21:
+            while not self.impact_check_base():
 
                 self.active_tet.current_point[0] += 1
-                self.impact_check()
 
 
-    def impact_check(self):
+
+    def impact_check_base(self):
 
         if (self.active_tet.current_point[0] + self.active_tet.limits[3]) == 21:
             self.write_active_tet()
+            return True
 
 
+        for x,col in enumerate(self.active_tet.tet[self.active_tet.limits[3]]):
+            if col not in "." and self.grid[(self.active_tet.current_point[0] + self.active_tet.limits[3])+1][self.active_tet.current_point[1]+x] not in ".":
+                self.write_active_tet()
+                return True
 
+
+        return False
+
+    def impact_check_side(self,direction):
+        if direction == "left":
+            if (self.active_tet.current_point[1] - self.active_tet.limits[0]) == 0:
+                return True
+            for y,row in enumerate(self.active_tet.tet):
+                if (row[self.active_tet.limits[0]] not in "." and
+                self.grid[self.active_tet.current_point[0]+y][self.active_tet.current_point[1] + self.active_tet.limits[0]-1] not in "."
+                ):
+                    return True
+
+        elif direction == "right":
+            if (self.active_tet.current_point[1] + self.active_tet.limits[1]) == 9:
+                return True
+            for y,row in enumerate(self.active_tet.tet):
+                if (row[self.active_tet.limits[1]] not in "." and
+                self.grid[self.active_tet.current_point[0]+y][self.active_tet.current_point[1] + self.active_tet.limits[1]+1] not in "."
+                ):
+                    return True
         else:
-            for x,col in enumerate(self.active_tet.tet[self.active_tet.limits[3]]):
-                if self.grid[(self.active_tet.current_point[0] + self.active_tet.limits[3])+1][self.active_tet.current_point[1]+x] not in ".":
-                    self.write_active_tet()
+            return False
 
     def write_active_tet(self):
         for y,row in enumerate(self.active_tet.tet):
